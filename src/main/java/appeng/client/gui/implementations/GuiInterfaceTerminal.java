@@ -38,14 +38,17 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
+import static appeng.helpers.DualityInterface.NUMBER_OF_PATTERN_SLOTS;
+
 
 public class GuiInterfaceTerminal extends AEBaseGui
 {
-
-	private static final int LINES_ON_PAGE = 6;
+	int SLOTS = NUMBER_OF_PATTERN_SLOTS == 18? 18 : 9;
+	private static final int LINES_ON_PAGE = 3;
 
 	// TODO: copied from GuiMEMonitorable. It looks not changed, maybe unneeded?
 	private final int offsetX = 9;
+	int Rollback = 36;
 
 	private final HashMap<Long, ClientDCInternalInv> byId = new HashMap<Long, ClientDCInternalInv>();
 	private final HashMultimap<String, ClientDCInternalInv> byName = HashMultimap.create();
@@ -108,9 +111,12 @@ public class GuiInterfaceTerminal extends AEBaseGui
 			if( lineObj instanceof ClientDCInternalInv )
 			{
 				final ClientDCInternalInv inv = (ClientDCInternalInv) lineObj;
-				for( int z = 0; z < inv.getInventory().getSizeInventory(); z++ )
-				{
-					this.inventorySlots.inventorySlots.add( new SlotDisconnected( inv, z, z * 18 + 8, 1 + offset ) );
+				final int divader = inv.getInventory().getSizeInventory() / 9;
+				//final int width = inv.getInventory().getSizeInventory() / divader * 18;
+				for(int y = 0; y < divader; y++) {
+					for (int z = 0; z < SLOTS/divader; z++) {
+						this.inventorySlots.inventorySlots.add(new SlotDisconnected(inv, Math.max(z,y*9+z), z * 18 + 8, (1 + offset)+(y*18)));
+					}
 				}
 			}
 			else if( lineObj instanceof String )
@@ -127,9 +133,9 @@ public class GuiInterfaceTerminal extends AEBaseGui
 					name = name.substring( 0, name.length() - 1 );
 				}
 
-				this.fontRendererObj.drawString( name, 10, 6 + offset, 4210752 );
+					this.fontRendererObj.drawString(name, 10, 14 + offset, 4210752);
 			}
-			offset += 18;
+			offset += Rollback;
 		}
 	}
 
@@ -164,10 +170,19 @@ public class GuiInterfaceTerminal extends AEBaseGui
 				final ClientDCInternalInv inv = (ClientDCInternalInv) lineObj;
 
 				GL11.glColor4f( 1, 1, 1, 1 );
-				final int width = inv.getInventory().getSizeInventory() * 18;
-				this.drawTexturedModalRect( offsetX + 7, offsetY + offset, 7, 139, width, 18 );
+				final int divader = inv.getInventory().getSizeInventory() / 9;
+				final int width = inv.getInventory().getSizeInventory() / divader * 18;
+				for(int y = 0; y < divader; y++) {
+
+					this.drawTexturedModalRect(offsetX + 7, offsetY + offset+(y*18), 7, 139, width, 18);
+									                         // начало x        // начало  y
+//				int f = inv.getInventory().getSizeInventory();
+//				if (inv.getInventory().getSizeInventory() > 9) {
+//				this.drawTexturedModalRect( offsetX + 7, offsetY + offset + 18, 7, 139, width, 18 );
+//				}
+				}
 			}
-			offset += 18;
+			offset += Rollback;
 		}
 
 		if( this.searchField != null )
@@ -309,7 +324,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 			this.lines.addAll( clientInventories );
 		}
 
-		this.getScrollBar().setRange( 0, this.lines.size() - LINES_ON_PAGE, 2 );
+		this.getScrollBar().setRange( 0, this.lines.size() - LINES_ON_PAGE, 2);
 	}
 
 	private boolean itemStackMatchesSearchTerm( final ItemStack itemStack, final String searchTerm )
@@ -389,7 +404,7 @@ public class GuiInterfaceTerminal extends AEBaseGui
 
 		if( o == null )
 		{
-			this.byId.put( id, o = new ClientDCInternalInv( 9, id, sortBy, string ) );
+			this.byId.put( id, o = new ClientDCInternalInv( 18, id, sortBy, string ) );
 			this.refreshList = true;
 		}
 

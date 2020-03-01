@@ -49,19 +49,21 @@ public class ContainerInterface extends ContainerUpgradeable
 
 		this.myDuality = te.getInterfaceDuality();
 
-		for( int x = 0; x < DualityInterface.NUMBER_OF_PATTERN_SLOTS; x++ )
-		{
-			this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.ENCODED_PATTERN, this.myDuality.getPatterns(), x, 8 + 18 * x, 90 + 7, this.getInventoryPlayer() ) );
+		for( int x = 0; x < DualityInterface.NUMBER_OF_PATTERN_SLOTS; x++ ) {
+
+			this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.ENCODED_PATTERN, this.myDuality.getPatterns(), x, x >= 9 ? 8 + 18 * (x-9) : 8 + 18 * x, x >= 9 ? 87+18 : 87, this.getInventoryPlayer() ) );
 		}
+
+
 
 		for( int x = 0; x < DualityInterface.NUMBER_OF_CONFIG_SLOTS; x++ )
 		{
-			this.addSlotToContainer( new SlotFake( this.myDuality.getConfig(), x, 8 + 18 * x, 35 ) );
+			this.addSlotToContainer( new SlotFake( this.myDuality.getConfig(), x, 8 + 18 * x, 26 ) );
 		}
 
 		for( int x = 0; x < DualityInterface.NUMBER_OF_STORAGE_SLOTS; x++ )
 		{
-			this.addSlotToContainer( new SlotNormal( this.myDuality.getStorage(), x, 8 + 18 * x, 35 + 18 ) );
+			this.addSlotToContainer( new SlotNormal( this.myDuality.getStorage(), x, 8 + 18 * x, 26 + 18 ) );
 		}
 	}
 

@@ -96,7 +96,7 @@ public class DualityInterface
 
 	public static final int NUMBER_OF_STORAGE_SLOTS = 9;
 	public static final int NUMBER_OF_CONFIG_SLOTS = 9;
-	public static final int NUMBER_OF_PATTERN_SLOTS = 9;
+	public static final int NUMBER_OF_PATTERN_SLOTS = 18;
 
 	private static final Collection<Block> BAD_BLOCKS = new HashSet<Block>( 100 );
 	private final int[] sides = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -313,7 +313,7 @@ public class DualityInterface
 
 	private void updateCraftingList()
 	{
-		final Boolean[] accountedFor = { false, false, false, false, false, false, false, false, false }; // 9...
+		final Boolean[] accountedFor = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false  }; // 9... 18
 
 		assert ( accountedFor.length == this.patterns.getSizeInventory() );
 
